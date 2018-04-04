@@ -14,7 +14,7 @@ OAuth.registerService('oidc', 2, null, function (query) {
 
   var serviceData = {};
   serviceData.id = userinfo.id;
-  serviceData.username = userinfo.username;
+  serviceData.username = userinfo.uid;
   serviceData.accessToken = userinfo.accessToken;
   serviceData.expiresAt = userinfo.expiresAt;
   serviceData.email = userinfo.email;
@@ -30,7 +30,7 @@ OAuth.registerService('oidc', 2, null, function (query) {
   if (debug) console.log('XXX: serviceData:', serviceData);
 
   var profile = {};
-  profile.name = userinfo.name;
+  profile.name = userinfo.last_name;
   profile.email = userinfo.email;
   if (debug) console.log('XXX: profile:', profile);
 
