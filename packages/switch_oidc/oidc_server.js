@@ -17,7 +17,7 @@ OAuth.registerService('oidc', 2, null, function (query) {
   serviceData.username = userinfo.uid;
   serviceData.fullname = userinfo.displayName;
   serviceData.accessToken = userinfo.accessToken;
-  serviceData.expiresAt = OAuth.sealSecret(accessToken);
+  serviceData.expiresAt = expiresAt;
   serviceData.email = userinfo.email;
 
   if (accessToken) {
@@ -144,6 +144,7 @@ var getUserInfoFromEndpoint = function (accessToken, config) {
     console.log('XXX: getUserInfo response: ', response.data);
 
   var userinfo = response.data;
+  var expiresAt = (+new Date) + (1000 * parseInt(token.expires_in, 10));
   return {
     id: userinfo.id || userinfo.sub,
     username: userinfo.username || userinfo.preferred_username,
