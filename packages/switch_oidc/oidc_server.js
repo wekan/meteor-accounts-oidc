@@ -17,7 +17,7 @@ OAuth.registerService('oidc', 2, null, function (query) {
   serviceData.username = userinfo.uid;
   serviceData.fullname = userinfo.displayName;
   serviceData.accessToken = userinfo.accessToken;
-  serviceData.expiresAt = userinfo.expiresAt;
+  serviceData.expiresAt = OAuth.sealSecret(accessToken);
   serviceData.email = userinfo.email;
 
   if (accessToken) {
