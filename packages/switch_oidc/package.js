@@ -1,8 +1,8 @@
 Package.describe({
   summary: "OpenID Connect (OIDC) flow for Meteor",
   version: "1.0.5",
-  name: "switch:oidc",
-  git: "https://github.com/switch-ch/meteor-accounts-oidc.git",
+  name: "salleman:oidc",
+  git: "https://github.com/salleman33/meteor-accounts-oidc.git",
 });
 
 Package.onUse(function(api) {

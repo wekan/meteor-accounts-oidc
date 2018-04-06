@@ -1,10 +1,10 @@
-# switch:accounts-oidc package
+# salleman:accounts-oidc package
 
 A Meteor login service for OpenID Connect (OIDC).
 
 ## Installation
 
-    meteor add switch:accounts-oidc
+    meteor add salleman:accounts-oidc
 
 ## Usage
 
