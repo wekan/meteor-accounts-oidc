@@ -84,14 +84,26 @@ var getToken = function (query) {
 };
 
 var getUserInfo = function (accessToken) {
+  var debug = false;
   var config = getConfiguration();
-
-  if (config.userinfoEndpoint) {
-    return getUserInfoFromEndpoint(accessToken, config);
+  var serverUserinfoEndpoint = config.serverUrl + config.userinfoEndpoint;
+  var response;
+  try {
+    response = HTTP.get(
+      serverUserinfoEndpoint,
+      {
+        headers: {
+          "User-Agent": userAgent,
+          "Authorization": "Bearer " + accessToken
+        }
+      }
+    );
+  } catch (err) {
+    throw _.extend(new Error("Failed to fetch userinfo from OIDC " + serverUserinfoEndpoint + ": " + err.message),
+                   {response: err.response});
   }
-  else {
-    return getUserInfoFromToken(accessToken);
-  }
+  if (debug) console.log('XXX: getUserInfo response: ', response.data);
+  return response.data;
 };
 
 var getConfiguration = function () {
@@ -124,47 +136,3 @@ Oidc.retrieveCredential = function (credentialToken, credentialSecret) {
   return OAuth.retrieveCredential(credentialToken, credentialSecret);
 };
 
-var getUserInfoFromEndpoint = function (accessToken, config) {
-  var debug = false;
-
-  var serverUserinfoEndpoint = config.serverUrl + config.userinfoEndpoint;
-  var response;
-  try {
-    response = HTTP.get(serverUserinfoEndpoint, {
-      headers: {
-        "User-Agent": userAgent,
-        "Authorization": "Bearer " + accessToken
-      }
-    });
-  }
-  catch (err) {
-    throw _.extend(new Error("Failed to fetch userinfo from OIDC " + serverUserinfoEndpoint + ": " + err.message), { response: err.response });
-  }
-  if (debug)
-    console.log('XXX: getUserInfo response: ', response.data);
-
-  var userinfo = response.data;
-  var expiresAt = (+new Date) + (1000 * parseInt(token.expires_in, 10));
-  return {
-    id: userinfo.id || userinfo.sub,
-    username: userinfo.username || userinfo.preferred_username,
-    accessToken: OAuth.sealSecret(accessToken),
-    expiresAt: expiresAt,
-    email: userinfo.email,
-    name: userinfo.name
-  };
-}
-
-var getUserInfoFromToken = function (accessToken) {
-  var tokenContent = getTokenContent(accessToken);
-  var mainEmail = tokenContent.email || tokenContent.emails[0];
-
-  return {
-    id: tokenContent.sub,
-    username: tokenContent.username || tokenContent.preferred_username || mainEmail,
-    accessToken: OAuth.sealSecret(accessToken),
-    expiresAt: tokenContent.exp,
-    email: mainEmail,
-    name: tokenContent.name
-  }
-}
