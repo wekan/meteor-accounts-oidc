@@ -88,7 +88,7 @@ var getUserInfo = function (accessToken) {
   var config = getConfiguration();
   // Some userinfo endpoints use a different base URL than the authorization or token endpoints.
   // This logic allows the end user to override the setting by providing the full URL to userinfo in their config.
-  if config.userinfoEndpoint.includes("https://") {
+  if (config.userinfoEndpoint.includes("https://")) {
     var serverUserinfoEndpoint = config.userinfoEndpoint;
   } else {
     var serverUserinfoEndpoint = config.serverUrl + config.userinfoEndpoint;
