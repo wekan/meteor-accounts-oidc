@@ -2,7 +2,7 @@ Oidc = {};
 
 OAuth.registerService('oidc', 2, null, function (query) {
 
-  var debug = false;
+  var debug = process.env.DEBUG || false;
   var token = getToken(query);
   if (debug) console.log('XXX: register token:', token);
 
@@ -47,7 +47,7 @@ if (Meteor.release) {
 }
 
 var getToken = function (query) {
-  var debug = false;
+  var debug = process.env.DEBUG || false;
   var config = getConfiguration();
   var serverTokenEndpoint = config.serverUrl + config.tokenEndpoint;
   var response;
@@ -84,7 +84,7 @@ var getToken = function (query) {
 };
 
 var getUserInfo = function (accessToken) {
-  var debug = false;
+  var debug = process.env.DEBUG || false;
   var config = getConfiguration();
   // Some userinfo endpoints use a different base URL than the authorization or token endpoints.
   // This logic allows the end user to override the setting by providing the full URL to userinfo in their config.
