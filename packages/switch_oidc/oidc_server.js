@@ -13,12 +13,12 @@ OAuth.registerService('oidc', 2, null, function (query) {
   if (debug) console.log('XXX: userinfo:', userinfo);
 
   var serviceData = {};
-  serviceData.id = userinfo.id;
-  serviceData.username = userinfo.uid;
-  serviceData.fullname = userinfo.displayName;
-  serviceData.accessToken = userinfo.accessToken;
+  serviceData.id = userinfo[process.env.OAUTH2_ID_MAP] || userinfo[id];
+  serviceData.username = userinfo[process.env.OAUTH2_USERNAME_MAP] || userinfo[uid];
+  serviceData.fullname = userinfo[process.env.OAUTH2_FULLNAME_MAP] || userinfo[displayName];
+  serviceData.accessToken = accessToken;
   serviceData.expiresAt = expiresAt;
-  serviceData.email = userinfo.email;
+  serviceData.email = userinfo[process.env.OAUTH2_EMAIL_MAP] || userinfo[email];
 
   if (accessToken) {
     var tokenContent = getTokenContent(accessToken);
@@ -31,8 +31,8 @@ OAuth.registerService('oidc', 2, null, function (query) {
   if (debug) console.log('XXX: serviceData:', serviceData);
 
   var profile = {};
-  profile.name = userinfo.last_name;
-  profile.email = userinfo.email;
+  profile.name = userinfo[process.env.OAUTH2_FULLNAME_MAP] || userinfo[displayName];
+  profile.email = userinfo[process.env.OAUTH2_EMAIL_MAP] || userinfo[email];
   if (debug) console.log('XXX: profile:', profile);
 
   return {
@@ -141,4 +141,3 @@ var getTokenContent = function (token) {
 Oidc.retrieveCredential = function (credentialToken, credentialSecret) {
   return OAuth.retrieveCredential(credentialToken, credentialSecret);
 };
-
