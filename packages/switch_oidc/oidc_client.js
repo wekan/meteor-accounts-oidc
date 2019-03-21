@@ -32,7 +32,7 @@ Oidc.requestCredential = function (options, credentialRequestCompleteCallback) {
   options.scope = scope.join(' ');
 
   if (config.loginStyle && config.loginStyle == 'popup') {
-    options.display = 'redirect';
+    options.display = 'popup';
   }
 
   var loginUrl = config.serverUrl + config.authorizationEndpoint;
@@ -51,11 +51,11 @@ Oidc.requestCredential = function (options, credentialRequestCompleteCallback) {
 
   //console.log('XXX: loginURL: ' + loginUrl)
 
-//  options.popupOptions = options.popupOptions || {};
-//  var popupOptions = {
-//    width:  options.popupOptions.width || 'auto',
-//    height: options.popupOptions.height || 'auto'
-//  };
+  options.popupOptions = options.popupOptions || {};
+  var popupOptions = {
+    width:  options.popupOptions.width || 320,
+    height: options.popupOptions.height || 450
+  };
 
   OAuth.launchLogin({
     loginService: 'oidc',
@@ -63,7 +63,6 @@ Oidc.requestCredential = function (options, credentialRequestCompleteCallback) {
     loginUrl: loginUrl,
     credentialRequestCompleteCallback: credentialRequestCompleteCallback,
     credentialToken: credentialToken,
+    popupOptions: popupOptions,
   });
-//    popupOptions: popupOptions,
-
 };
