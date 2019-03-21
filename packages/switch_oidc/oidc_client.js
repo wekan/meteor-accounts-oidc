@@ -31,9 +31,9 @@ Oidc.requestCredential = function (options, credentialRequestCompleteCallback) {
   options.state = OAuth._stateParam(loginStyle, credentialToken, options.redirectUrl);
   options.scope = scope.join(' ');
 
-  if (config.loginStyle && config.loginStyle == 'popup') {
+  if (process.env.OAUTH2_LOGIN_STYLE == 'popup') {
     options.display = 'popup';
-  } else if (config.loginStyle && config.loginStyle == 'redirect') {
+  } else if (process.env.OAUTH2_LOGIN_STYLE == 'redirect') {
     options.display = 'redirect';
   }
 
@@ -53,7 +53,7 @@ Oidc.requestCredential = function (options, credentialRequestCompleteCallback) {
 
   //console.log('XXX: loginURL: ' + loginUrl)
 
-  if (config.loginStyle && config.loginStyle == 'popup') {
+  if (process.env.OAUTH2_LOGIN_STYLE == 'popup') {
     options.popupOptions = options.popupOptions || {};
     var popupOptions = {
       width:  options.popupOptions.width || 320,
@@ -67,7 +67,7 @@ Oidc.requestCredential = function (options, credentialRequestCompleteCallback) {
       credentialToken: credentialToken,
       popupOptions: popupOptions,
     });
-  } else if (config.loginStyle && config.loginStyle == 'redirect') {
+  } else if (process.env.OAUTH2_LOGIN_STYLE == 'redirect') {
     OAuth.launchLogin({
       loginService: 'oidc',
       loginStyle: loginStyle,
