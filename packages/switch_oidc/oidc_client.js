@@ -53,8 +53,8 @@ Oidc.requestCredential = function (options, credentialRequestCompleteCallback) {
 
   options.popupOptions = options.popupOptions || {};
   var popupOptions = {
-    width:  options.popupOptions.width || 100%,
-    height: options.popupOptions.height || 100%
+    width:  options.popupOptions.width || '100%',
+    height: options.popupOptions.height || '100%'
   };
 
   OAuth.launchLogin({
