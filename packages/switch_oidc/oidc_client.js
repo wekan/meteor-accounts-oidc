@@ -31,10 +31,8 @@ Oidc.requestCredential = function (options, credentialRequestCompleteCallback) {
   options.state = OAuth._stateParam(loginStyle, credentialToken, options.redirectUrl);
   options.scope = scope.join(' ');
 
-  if (process.env.OAUTH2_LOGIN_STYLE == 'popup') {
+  if (config.loginStyle && config.loginStyle == 'popup') {
     options.display = 'popup';
-  } else if (process.env.OAUTH2_LOGIN_STYLE == 'redirect') {
-    options.display = 'redirect';
   }
 
   var loginUrl = config.serverUrl + config.authorizationEndpoint;
@@ -53,27 +51,18 @@ Oidc.requestCredential = function (options, credentialRequestCompleteCallback) {
 
   //console.log('XXX: loginURL: ' + loginUrl)
 
-  if (process.env.OAUTH2_LOGIN_STYLE == 'popup') {
-    options.popupOptions = options.popupOptions || {};
-    var popupOptions = {
-      width:  options.popupOptions.width || 320,
-      height: options.popupOptions.height || 450
-    };
-    OAuth.launchLogin({
-      loginService: 'oidc',
-      loginStyle: loginStyle,
-      loginUrl: loginUrl,
-      credentialRequestCompleteCallback: credentialRequestCompleteCallback,
-      credentialToken: credentialToken,
-      popupOptions: popupOptions,
-    });
-  } else if (process.env.OAUTH2_LOGIN_STYLE == 'redirect') {
-    OAuth.launchLogin({
-      loginService: 'oidc',
-      loginStyle: loginStyle,
-      loginUrl: loginUrl,
-      credentialRequestCompleteCallback: credentialRequestCompleteCallback,
-      credentialToken: credentialToken,
-    });
-  }
+  options.popupOptions = options.popupOptions || {};
+  var popupOptions = {
+    width:  options.popupOptions.width || 320,
+    height: options.popupOptions.height || 450
+  };
+
+  OAuth.launchLogin({
+    loginService: 'oidc',
+    loginStyle: loginStyle,
+    loginUrl: loginUrl,
+    credentialRequestCompleteCallback: credentialRequestCompleteCallback,
+    credentialToken: credentialToken,
+    popupOptions: popupOptions,
+  });
 };
